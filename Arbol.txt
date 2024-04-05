@@ -1,0 +1,119 @@
+#include <iostream>
+using namespace std;
+
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+};
+
+
+TreeNode* createNode(int value) {
+    TreeNode* newNode = new TreeNode;
+    newNode->data = value;
+    newNode->left = nullptr;
+    newNode->right = nullptr;
+    return newNode;
+}
+
+
+void insert(TreeNode*& root, int value) {
+    if (root == nullptr) {
+        root = createNode(value);
+    } else {
+        if (value == root->data) {
+            cout << "El numero " << value << " ya existe en el arbol." << endl;
+        } else if (value < root->data) {
+            insert(root->left, value);
+        } else {
+            insert(root->right, value);
+        }
+    }
+}
+
+
+void display(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+    display(root->left);
+    cout << root->data << " ";
+    display(root->right);
+}
+
+
+bool search(TreeNode* root, int value) {
+    if (root == nullptr) {
+        return false;
+    }
+    if (root->data == value) {
+        return true;
+    }
+    if (value < root->data) {
+        return search(root->left, value);
+    } else {
+        return search(root->right, value);
+    }
+}
+
+int main() {
+    TreeNode* root = nullptr;
+    int choice, num;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Insertar raiz\n";
+        cout << "2. Insertar numero\n";
+        cout << "3. Buscar numero\n";
+        cout << "4. Mostrar arbol\n";
+        cout << "5. Salir\n";
+        cout << "Ingrese su opcion: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Ingrese la raiz del arbol: ";
+                cin >> num;
+                root = createNode(num);
+                break;
+            case 2:
+                if (root == nullptr) {
+                    cout << "Error: No se ha ingresado la raiz del arbol." << endl;
+                    break;
+                }
+                cout << "Ingrese un numero: ";
+                cin >> num;
+                insert(root, num);
+                break;
+            case 3:
+                if (root == nullptr) {
+                    cout << "Error: El arbol esta vacio." << endl;
+                } else {
+                    cout << "Ingrese el numero a buscar: ";
+                    cin >> num;
+                    if (search(root, num)) {
+                        cout << "El numero " << num << " se encuentra en el arbol." << endl;
+                    } else {
+                        cout << "El numero " << num << " no se encuentra en el arbol." << endl;
+                    }
+                }
+                break;
+            case 4:
+                if (root == nullptr) {
+                    cout << "El arbol esta vacio." << endl;
+                } else {
+                    cout << "Arbol actual: ";
+                    display(root);
+                    cout << endl;
+                }
+                break;
+            case 5:
+                cout << "Saliendo del programa.\n";
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo.\n";
+        }
+    } while (choice != 5);
+    
+    return 0;
+}
